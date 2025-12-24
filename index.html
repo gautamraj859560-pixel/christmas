@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merry Christmas 🎄</title>
+
+<!-- ================= CSS ================= -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Pacifico&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(180deg,#fff5f5,#e8f5e9);
+  min-height:100vh;
+  overflow-x:hidden;
+  color:#333;
+  animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:80px 20px;
+  text-align:center;
+  display:none;
+}
+
+.container.active{display:block}
+
+h1{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(2rem,6vw,3rem);
+  color:#c62828;
+  margin-bottom:20px;
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+p{
+  font-size:1.1rem;
+  line-height:1.8;
+  margin-bottom:35px;
+  max-width:700px;
+  margin-inline:auto;
+}
+
+.button{
+  display:inline-block;
+  padding:14px 34px;
+  background:#c62828;
+  color:white;
+  border:none;
+  border-radius:40px;
+  font-weight:500;
+  cursor:pointer;
+  margin:6px;
+  transition:.3s;
+}
+
+.button:hover{
+  background:#a61b1b;
+  transform:scale(1.08);
+  box-shadow:0 10px 25px rgba(0,0,0,.2)
+}
+
+.music-toggle{
+  background:linear-gradient(90deg,#ff8a65,#c62828);
+}
+
+.notes{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:22px;
+  margin-top:40px;
+}
+
+.note{
+  background:white;
+  padding:28px;
+  border-radius:22px;
+  box-shadow:0 12px 30px rgba(0,0,0,.1);
+  transition:.4s;
+}
+
+.note:hover{
+  transform:translateY(-8px) rotate(-1deg);
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:18px;
+  margin-top:40px;
+}
+
+.gallery img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:22px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  transition:.4s;
+}
+
+.gallery img:hover{transform:scale(1.08)}
+
+.snow{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999;
+}
+
+@media(max-width:480px){
+  .container{padding:60px 16px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= HOME ================= -->
+<div id="home" class="container active">
+  <h1>Merry Christmas 🎄</h1>
+  <p>
+    May your Christmas be filled with warmth, soft lights,
+    cozy moments and beautiful memories that stay forever.
+  </p>
+  <button class="button" onclick="showPage('notes')">Open Notes 💌</button>
+  <button id="music-toggle" class="button music-toggle">🔈 Music OFF</button>
+</div>
+
+<!-- ================= NOTES ================= -->
+<div id="notes" class="container">
+  <h1>Little Christmas Notes 💖</h1>
+  <div class="notes">
+    <div class="note">You make winter feel warmer ☕❄️</div>
+    <div class="note">Your smile beats Christmas lights ✨</div>
+    <div class="note">Best gift this season? You 🎁</div>
+    <div class="note">May joy follow you like snowflakes ❄️</div>
+  </div>
+  <br><br>
+  <button class="button" onclick="showPage('gallery')">View Gallery 🎅</button>
+  <button class="button" onclick="showPage('home')">Back 🎄</button>
+</div>
+
+<!-- ================= GALLERY ================= -->
+<div id="gallery" class="container">
+  <h1>Christmas Gallery 🎄</h1>
+  <div class="gallery">
+    <img src="https://images.unsplash.com/photo-1543589077-47d81606c1bf">
+    <img src="https://images.unsplash.com/photo-1512389098783-66b81f86e199">
+    <img src="https://images.unsplash.com/photo-1608889175112-b33f9f3c1c4a">
+    <img src="https://images.unsplash.com/photo-1545580492-8859ba8323cb">
+  </div>
+  <br><br>
+  <button class="button" onclick="showPage('home')">Back to Message 🎄</button>
+</div>
+
+<!-- ================= JS ================= -->
+<script>
+// Page switching
+function showPage(id){
+  document.querySelectorAll('.container').forEach(c=>c.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ❄️ Snow
+const canvas=document.createElement("canvas");
+canvas.className="snow";
+document.body.appendChild(canvas);
+const ctx=canvas.getContext("2d");
+let w,h,flakes=[];
+
+function resize(){
+  w=canvas.width=window.innerWidth;
+  h=canvas.height=window.innerHeight;
+}
+window.addEventListener("resize",resize);
+resize();
+
+flakes=Array.from({length:120},()=>({
+  x:Math.random()*w,
+  y:Math.random()*h,
+  r:Math.random()*3+1,
+  s:Math.random()+0.5
+}));
+
+function snow(){
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle="rgba(255,255,255,.85)";
+  flakes.forEach(f=>{
+    ctx.beginPath();
+    ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+    ctx.fill();
+    f.y+=f.s;
+    if(f.y>h){f.y=-5;f.x=Math.random()*w}
+  });
+  requestAnimationFrame(snow);
+}
+snow();
+
+// 🎵 Music
+const bgm=new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+bgm.loop=true;
+bgm.volume=0.25;
+let playing=false;
+const btn=document.getElementById("music-toggle");
+
+btn.onclick=()=>{
+  if(!playing){bgm.play();btn.textContent="🔊 Music ON"}
+  else{bgm.pause();btn.textContent="🔈 Music OFF"}
+  playing=!playing;
+};
+</script>
+
+</body>
+</html>
